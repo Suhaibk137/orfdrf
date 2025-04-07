@@ -160,4 +160,42 @@ class ApiService {
       throw Exception('Failed to search orders: ${response.statusCode}');
     }
   }
+  
+  // Update payment verification status
+  static Future<Map<String, dynamic>> updatePaymentVerification({
+    required String orderId, 
+    required String status,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/update_payment_verification.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'order_id': orderId,
+        'verification_status': status,
+      }),
+    );
+    
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to update verification status: ${response.statusCode}');
+    }
+  }
+
+  // Delete order
+  static Future<Map<String, dynamic>> deleteOrder({required String orderId}) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/delete_order.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'order_id': orderId,
+      }),
+    );
+    
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to delete order: ${response.statusCode}');
+    }
+  }
 }
